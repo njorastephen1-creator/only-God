@@ -303,23 +303,23 @@
       
       displayGraduates();
     }
-                function generateCertificate(studentId, studentName, gradDate) {
+                    function generateCertificate(studentId, studentName, gradDate) {
       console.log('Generating certificate for:', studentName);
       
       try {
         const { jsPDF } = window.jspdf;
         
-        // ========== LANDSCAPE MODE: 29.7cm × 21cm ==========
+        // ========== PORTRAIT MODE: 21cm × 29.7cm ==========
         const doc = new jsPDF({
-          orientation: 'landscape',
+          orientation: 'portrait',
           unit: 'cm',
-          format: [29.7, 21]
+          format: [21, 29.7]
         });
         
-        const pageWidth = 29.7;
-        const pageHeight = 21;
+        const pageWidth = 21;
+        const pageHeight = 29.7;
         
-        // Colors (matching your physical certificate)
+        // Colors (exact match to your certificate)
         const darkBlue = '#1e3a8a';
         const lightBlue = '#3b82f6';
         const orange = '#f59e0b';
@@ -329,87 +329,82 @@
         doc.rect(0, 0, pageWidth, pageHeight, 'F');
         
         // ========== DECORATIVE CORNERS ==========
-        // Top right - Blue triangle
+        // Top right - Blue triangle (larger)
         doc.setFillColor(59, 130, 246);
-        doc.triangle(pageWidth - 5, 0, pageWidth, 0, pageWidth, 4, 'F');
+        doc.triangle(pageWidth - 4, 0, pageWidth, 0, pageWidth, 5, 'F');
         
         // Top right - Orange triangle (inner)
         doc.setFillColor(245, 158, 11);
-        doc.triangle(pageWidth - 4, 0, pageWidth, 0, pageWidth, 3, 'F');
+        doc.triangle(pageWidth - 3, 0, pageWidth, 0, pageWidth, 4, 'F');
         
-        // Bottom left - Blue triangle
+        // Bottom left - Blue triangle (larger)
         doc.setFillColor(59, 130, 246);
-        doc.triangle(0, pageHeight, 5, pageHeight, 0, pageHeight - 4, 'F');
+        doc.triangle(0, pageHeight, 4, pageHeight, 0, pageHeight - 5, 'F');
         
         // Bottom left - Orange triangle (inner)
         doc.setFillColor(245, 158, 11);
-        doc.triangle(0, pageHeight, 4, pageHeight, 0, pageHeight - 3, 'F');
+        doc.triangle(0, pageHeight, 3, pageHeight, 0, pageHeight - 4, 'F');
         
         // ========== ORANGE BORDER FRAME ==========
         doc.setDrawColor(245, 158, 11);
         doc.setLineWidth(0.3);
-        doc.rect(1.5, 1.5, pageWidth - 3, pageHeight - 3);
+        doc.rect(1.2, 1.2, pageWidth - 2.4, pageHeight - 2.4);
         
         // ========== LOGO AT TOP CENTER ==========
-        // Load your logo from GitHub
         const logoUrl = 'https://njorastephen1-creator.github.io/important-2/download.jfif';
         
-        // Add logo (4cm diameter circle area)
         try {
-          doc.addImage(logoUrl, 'JPEG', pageWidth/2 - 2, 1.8, 4, 4);
+          // Logo: 3.5cm diameter, centered at top
+          doc.addImage(logoUrl, 'JPEG', pageWidth/2 - 1.75, 1.5, 3.5, 3.5);
         } catch (e) {
-          // Fallback if logo doesn't load
-          console.log('Logo not loaded, using fallback');
+          console.log('Logo fallback');
           doc.setFillColor(239, 68, 68);
-          doc.circle(pageWidth/2, 3.8, 1.5, 'F');
-          doc.setFontSize(10);
-          doc.setTextColor(255, 255, 255);
-          doc.text('KSF', pageWidth/2, 4, { align: 'center' });
+          doc.circle(pageWidth/2, 3.25, 1.5, 'F');
         }
         
         // ========== ORGANIZATION NAME ==========
-        doc.setFontSize(26);
-        doc.setTextColor(30, 58, 138);
-        doc.setFont('helvetica', 'bold');
-        doc.text('KINGDOM SEEKERS FELLOWSHIP', pageWidth / 2, 6.5, { align: 'center' });
-        
-        // ========== ADDRESS ==========
-        doc.setFontSize(12);
-        doc.setTextColor(30, 58, 138);
-        doc.setFont('helvetica', 'normal');
-        doc.text('1139-00600', pageWidth / 2, 7.3, { align: 'center' });
-        doc.text('NGARA NAIROBI', pageWidth / 2, 7.9, { align: 'center' });
-        
-        // ========== CERTIFICATE TITLE (Gothic/Old English Style) ==========
-        doc.setFontSize(32);
-        doc.setTextColor(59, 130, 246);
-        doc.setFont('times', 'bolditalic');
-        doc.text('Discipleship Certificate', pageWidth / 2, 9.8, { align: 'center' });
-        
-        // ========== AWARDED TO ==========
-        doc.setFontSize(14);
-        doc.setTextColor(62, 39, 35);
-        doc.setFont('times', 'italic');
-        doc.text('Awarded To', pageWidth / 2, 11.2, { align: 'center' });
-        
-        // ========== STUDENT NAME ==========
         doc.setFontSize(22);
         doc.setTextColor(30, 58, 138);
+        doc.setFont('helvetica', 'bold');
+        doc.text('KINGDOM SEEKERS FELLOWSHIP', pageWidth / 2, 6, { align: 'center' });
+        
+        // ========== ADDRESS ==========
+        doc.setFontSize(10);
+        doc.setTextColor(30, 58, 138);
+        doc.setFont('helvetica', 'normal');
+        doc.text('1139-00600', pageWidth / 2, 6.7, { align: 'center' });
+        doc.text('NGARA NAIROBI', pageWidth / 2, 7.3, { align: 'center' });
+        
+        // ========== CERTIFICATE TITLE (Gothic/Old English Style) ==========
+        doc.setFontSize(28);
+        doc.setTextColor(59, 130, 246);
+        doc.setFont('times', 'bolditalic');
+        doc.text('Discipleship Certificate', pageWidth / 2, 9.2, { align: 'center' });
+        
+        // ========== AWARDED TO ==========
+        doc.setFontSize(13);
+        doc.setTextColor(62, 39, 35);
+        doc.setFont('times', 'italic');
+        doc.text('Awarded To', pageWidth / 2, 10.5, { align: 'center' });
+        
+        // ========== STUDENT NAME ==========
+        doc.setFontSize(20);
+        doc.setTextColor(30, 58, 138);
         doc.setFont('times', 'bold');
-        doc.text(studentName.toUpperCase(), pageWidth / 2, 12.5, { align: 'center' });
+        doc.text(studentName.toUpperCase(), pageWidth / 2, 11.8, { align: 'center' });
         
         // ========== DOTTED LINE ==========
         doc.setDrawColor(30, 58, 138);
         doc.setLineWidth(0.1);
         doc.setLineDashPattern([0.5, 0.5]);
-        doc.line(5, 12.9, pageWidth - 5, 12.9);
+        doc.line(3, 12.2, pageWidth - 3, 12.2);
         doc.setLineDashPattern([]);
         
         // ========== COURSE DESCRIPTION ==========
-        doc.setFontSize(10);
+        doc.setFontSize(9);
         doc.setTextColor(31, 41, 55);
         doc.setFont('times', 'normal');
-        doc.text('Upon successful completion of the Discipleship Course which entails:-', pageWidth / 2, 14, { align: 'center' });
+        doc.text('Upon successful completion of the Discipleship Course which entails:-', pageWidth / 2, 13.3, { align: 'center' });
         
         // ========== LESSONS LIST (2 columns) ==========
         const lessons = [
@@ -425,14 +420,14 @@
           "10. DELIVERANCE"
         ];
         
-        doc.setFontSize(9);
+        doc.setFontSize(8.5);
         doc.setTextColor(62, 39, 35);
         
         // Left column (1-5)
-        const leftColumnX = 7;
-        const rightColumnX = 17;
-        const startY = 15;
-        const lineHeight = 1.1;
+        const leftColumnX = 4.5;
+        const rightColumnX = 12;
+        const startY = 14.3;
+        const lineHeight = 1;
         
         for (let i = 0; i < 5; i++) {
           doc.text(lessons[i], leftColumnX, startY + (i * lineHeight));
@@ -455,39 +450,39 @@
           return n + (s[(v - 20) % 10] || s[v] || s[0]);
         };
         
-        doc.setFontSize(10);
+        doc.setFontSize(9);
         doc.setTextColor(31, 41, 55);
         doc.setFont('times', 'italic');
-        doc.text('on this ' + getOrdinal(day) + ' Day of ' + month + ', ' + year + '.', pageWidth / 2, 18.5, { align: 'center' });
+        doc.text('on this ' + getOrdinal(day) + ' Day of ' + month + ', ' + year + '.', pageWidth / 2, 19.5, { align: 'center' });
         
         // ========== SIGNATURE ==========
         // Signature line
         doc.setDrawColor(30, 58, 138);
         doc.setLineWidth(0.1);
-        doc.line(18, 19.5, 23, 19.5);
+        doc.line(13, 21, 18, 21);
         
         // Name
-        doc.setFontSize(9);
+        doc.setFontSize(8.5);
         doc.setTextColor(31, 41, 55);
         doc.setFont('helvetica', 'bold');
-        doc.text('ESSOLLOM KARANJA.', 20.5, 20, { align: 'center' });
+        doc.text('ESSOLLOM KARANJA.', 15.5, 21.5, { align: 'center' });
         
         // Title
         doc.setFont('helvetica', 'normal');
-        doc.setFontSize(8);
-        doc.text('Senior Pastor', 20.5, 20.4, { align: 'center' });
+        doc.setFontSize(7.5);
+        doc.text('Senior Pastor', 15.5, 21.9, { align: 'center' });
         
         // ========== MOTTO (Cursive Style) ==========
-        doc.setFontSize(12);
+        doc.setFontSize(11);
         doc.setTextColor(62, 39, 35);
         doc.setFont('times', 'italic');
-        doc.text('Seek Ye First The Kingdom Of God', pageWidth / 2, 19.8, { align: 'center' });
+        doc.text('Seek Ye First The Kingdom Of God', pageWidth / 2, 23, { align: 'center' });
         
         // ========== SAVE PDF ==========
         const fileName = 'Certificate_' + studentName.replace(/\s+/g, '_') + '_' + gradDate + '.pdf';
         doc.save(fileName);
         
-        // Log to NEW Firebase project
+        // Log to NEW Firebase
         try {
           const newDb = firebase.app('certificate-app').database();
           newDb.ref('generated_certificates/' + studentId).push({
@@ -496,9 +491,8 @@
             graduationDate: gradDate,
             fileName: fileName
           });
-          console.log('✅ Certificate logged to NEW Firebase');
         } catch (logError) {
-          console.log('⚠️ Could not log:', logError.message);
+          console.log('Log error:', logError.message);
         }
         
         alert('✅ Certificate generated for ' + studentName + '!');
@@ -509,18 +503,16 @@
       }
     }
 
-    // Helper function for ordinal dates
+    // Helper function
     function getOrdinal(n) {
       const s = ["th", "st", "nd", "rd"];
       const v = n % 100;
       return n + (s[(v - 20) % 10] || s[v] || s[0]);
     }
 
-    // Initialize on page load
+    // Initialize
     window.addEventListener('DOMContentLoaded', () => {
-      console.log('✅ Certificate Generator loaded');
-      console.log('📊 Size: 29.7cm × 21cm (Landscape)');
-      console.log('📊 Logo: download.jfif');
+      console.log('✅ Certificate Generator loaded - PORTRAIT MODE');
     });
   </script>
 </body>
